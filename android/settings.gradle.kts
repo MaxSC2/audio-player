@@ -1,6 +1,11 @@
 pluginManagement {
-    val flutterVersion = System.getProperty("flutter.version", "3.24.0")
-    val flutterSdkPath = System.getProperty("flutter.sdkPath", "../..")
+    val flutterSdkPath = System.getProperty("flutter.sdkPath") ?: run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        properties.getProperty("flutter.sdkPath")
+    }
+    
+    requireNotNull(flutterSdkPath) { "flutter.sdkPath not set in local.properties" }
     
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
